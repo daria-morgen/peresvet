@@ -2,7 +2,7 @@
   <div class="reports_list">
     <div class="chat-container">
       <div class="chat-header">
-        <h2>"Зенит" (Марс)</h2>
+        <h2>"Зенит" (Земля)</h2>
       </div>
       <div class="chat-messages" id="chat-messages">
         <div v-for="(report, index) in reports" :key="index" class="message-container">
@@ -30,15 +30,7 @@ export default {
   name: 'App',
   data() {
     return {
-      reports: [],
-      newMessage: '', // Добавим новое свойство для хранения вводимого сообщения
-      inputAuthorName: 'От...',
-      inputPlaceholder: 'Введите сообщение...',
-      currentAuthorName: '',
-      newReport: {
-        authorName: '',
-        reportText: ''
-      }
+      reports: []
     };
   },
   methods: {
@@ -50,38 +42,6 @@ export default {
       if (report.reportText && report.reportText.length > 0) {
         report.expanded = !report.expanded;
       }
-    },
-    validateAndSendMessage() {
-      if (!this.currentAuthorName.trim()) {
-        const enteredName = window.prompt('Введите ваше имя:', '');
-        if (enteredName && enteredName.trim()) {
-          this.newReport.authorName = enteredName.trim();
-          this.currentAuthorName = enteredName.trim();
-          this.sendMessage();
-        } else {
-          alert('Пожалуйста, введите ваше имя.');
-        }
-      } else {
-        this.newReport.authorName = this.currentAuthorName;
-        this.sendMessage();
-      }
-    },
-    sendMessage() {
-      // Логика отправки сообщения (ваш код)
-      // Пример: отправка сообщения и добавление в список отчетов
-      // this.reports.push({authorName: this.newReport.authorName, reportText:this.newReport.reportText, expanded: false});
-      console.log(this.reportToJson(this.newReport))
-      this.inputPlaceholder=this.currentAuthorName + ', ведите сообщение...'
-      // Очищаем введенное сообщение после отправки
-      this.newReport = {
-        authorName: '',
-        reportText: ''
-      };
-    },
-    reportToJson(reportToJson) {
-      return "{\"authorName\":\"" + reportToJson.authorName + "\",\n" +
-          "    \"reportText\":\"" + reportToJson.reportText + "\",\n" +
-          "}";
     },
     truncatedText(text) {
       const maxLength = 70;
@@ -102,8 +62,6 @@ export default {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
-
-    this.inputPlaceholder = this.currentAuthorName === '' ? 'Dведите сообщение...' : this.authorName + ', ведите сообщение...'
   }
 };
 </script>
@@ -117,7 +75,7 @@ body {
 
 .chat-container {
   /*--container-bg-color: #f0f0f0;*/
-  max-width: 800px;
+  max-width: 900px;
   margin: 50px auto;
   border: 1px solid #ccc;
 
@@ -127,7 +85,7 @@ body {
   padding: 10px;
   background-size: cover; /* Позволяет изображению занимать всю доступную область */
 
-  background: url('./assets/background1.jpg') center center no-repeat;
+  /*background: url('./assets/background1.jpg') center center no-repeat;*/
   background-size: cover;
   /* Прозрачность фона */
   /*opacity: 0.5;*/
@@ -141,28 +99,6 @@ body {
   text-align: center;
   /*color: #f2f2f2;*/
 
-}
-
-.chat-input {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-.chat-input input {
-  flex: 1;
-  padding: 8px;
-}
-
-.chat-input button {
-  /*background-color: #191970;*/
-  /*color: #fff;*/
-  border: none;
-  padding: 8px 15px;
-  cursor: pointer;
-  border-radius: 3px;
-  margin-right: 5px;
 }
 
 .chat-messages {
@@ -182,16 +118,7 @@ body {
   margin-right: 10px;
   background-color: #f2f2f2;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-}
-
-.circle {
-  width: 30px; /* Размер увеличен в 3 раза */
-  height: 30px; /* Размер увеличен в 3 раза */
-  background-color: #a969d9;
-  border-radius: 50%;
-  margin-right: 10px;
-
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .user-details {
@@ -255,13 +182,8 @@ body {
   /*margin-left: auto;*/
 }
 
-.expand-button:disabled,
-.send-button:disabled {
+.expand-button:disabled {
   color: #7e8cd4;
-}
-
-.send-button {
-  margin-left: 10px;
 }
 
 .chat-messages::-webkit-scrollbar {

@@ -2,6 +2,7 @@ package com.silence.dto;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "Reports")
 public class Report {
@@ -19,14 +20,18 @@ public class Report {
     @Column(name = "status")
     private Status status;
 
+    @Column(name = "dateCreation")
+    private String dateCreation;
+
     public Report() {
 
     }
 
-    public Report(String authorName, String reportText, Status status) {
+    public Report(String authorName, String reportText, Status status, String dateCreation) {
         this.authorName = authorName;
         this.reportText = reportText;
         this.status = status;
+        this.dateCreation = dateCreation;
     }
 
     public long getId() {
@@ -55,6 +60,15 @@ public class Report {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+
+    public String getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(String dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     @Override

@@ -42,7 +42,9 @@ export default {
       currentAuthorName: '',
       newReport: {
         authorName: '',
-        reportText: ''
+        reportText: '',
+        dateCreation: '',
+        expanded: false
       }
     };
   },
@@ -60,32 +62,50 @@ export default {
       if (!this.currentAuthorName.trim()) {
         const enteredName = window.prompt('Введите ваше имя:', '');
         if (enteredName && enteredName.trim()) {
-          this.newReport.authorName = enteredName.trim();
+
           this.currentAuthorName = enteredName.trim();
           this.sendMessage();
         } else {
           alert('Пожалуйста, введите ваше имя.');
         }
       } else {
-        this.newReport.authorName = this.currentAuthorName;
         this.sendMessage();
       }
     },
     sendMessage() {
       // Логика отправки сообщения (ваш код)
       // Пример: отправка сообщения и добавление в список отчетов
-      // this.reports.push({authorName: this.newReport.authorName, reportText:this.newReport.reportText, expanded: false});
+      this.newReport.authorName = this.currentAuthorName;
+      this.newReport.dateCreation = new Date();
+
+      // this.newReport.reportText =
       console.log(this.reportToJson(this.newReport))
-      this.inputPlaceholder=this.currentAuthorName + ', ведите сообщение...'
+
+      this.reports.push(this.newReport);
+
+      const urlString = 'http://localhost:8080/api/reports'
+      this.axios.post(urlString, this.reportToJson(this.newReport),
+          {
+            headers: {
+              "content-type": "application/json",
+            },
+          }
+      );
+
+      this.inputPlaceholder = this.currentAuthorName + ', ведите сообщение...'
       // Очищаем введенное сообщение после отправки
       this.newReport = {
         authorName: '',
-        reportText: ''
+        reportText: '',
+        dateCreation: ''
       };
+
+
     },
     reportToJson(reportToJson) {
       return "{\"authorName\":\"" + reportToJson.authorName + "\",\n" +
           "    \"reportText\":\"" + reportToJson.reportText + "\",\n" +
+          "    \"dateCreation\":\"" + reportToJson.dateCreation + "\"\n" +
           "}";
     },
     truncatedText(text) {
@@ -107,7 +127,7 @@ export default {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
-
+    console.log(this.newReport.dateCreation)
     this.inputPlaceholder = this.currentAuthorName === '' ? 'Dведите сообщение...' : this.authorName + ', ведите сообщение...'
   }
 };
@@ -122,7 +142,7 @@ body {
 
 .chat-container {
   /*--container-bg-color: #f0f0f0;*/
-  max-width: 800px;
+  max-width: 900px;
   margin: 50px auto;
   border: 1px solid #ccc;
 
@@ -132,7 +152,7 @@ body {
   padding: 10px;
   background-size: cover; /* Позволяет изображению занимать всю доступную область */
 
-  background: url('./assets/background1.jpg') center center no-repeat;
+  /*background: url('./assets/background1.jpg') center center no-repeat;*/
   background-size: cover;
   /* Прозрачность фона */
   /*opacity: 0.5;*/
@@ -187,7 +207,7 @@ body {
   margin-right: 10px;
   background-color: #f2f2f2;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .circle {
