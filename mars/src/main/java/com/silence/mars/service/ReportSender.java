@@ -13,6 +13,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 
 @Service
 @EnableScheduling
@@ -25,7 +28,7 @@ public class ReportSender {
         this.reportRepository = reportRepository;
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 6000)
     public void sendReports() throws JsonProcessingException {
         final var reportsByStatusSUCCESS = reportRepository.findByStatus(Status.CREATED);
 
@@ -38,14 +41,24 @@ public class ReportSender {
             final var httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<String> request =
-                    new HttpEntity<String>(objectMapper.writeValueAsString(report).toString(), httpHeaders);
-            String personResultAsJsonStr =
-                    restTemplate.postForObject("http://localhost:8084/api/reports", request, String.class);
-
             report.setStatus(Status.SENDING);
+
+            //todo Добавить сервис форматирования дат
+            GregorianCalendar gcal = new GregorianCalendar();
+            SimpleDateFormat formattedDate
+                    = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String dateSending
+                    = formattedDate.format(
+                    gcal.getTime());
+
+            report.setDateSending(dateSending);
             reportRepository.save(report);
 
+            HttpEntity<String> request =
+                    new HttpEntity<String>(objectMapper.writeValueAsString(report).toString(), httpHeaders);
+
+            String personResultAsJsonStr =
+                    restTemplate.postForObject("http://localhost:8084/api/reports", request, String.class);
 
 
             if (objectMapper.readValue(personResultAsJsonStr, Report.class).getStatus().equals(Status.SUCCESS)) {

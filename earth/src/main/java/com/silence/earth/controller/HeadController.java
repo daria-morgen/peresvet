@@ -3,6 +3,7 @@ package com.silence.earth.controller;
 import com.silence.dto.Report;
 import com.silence.dto.Status;
 import com.silence.earth.repository.ReportRepository;
+import com.silence.earth.service.Emulator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,11 @@ public class HeadController {
 
     private final ReportRepository reportRepository;
 
-    public HeadController(ReportRepository reportRepository) {
+    private final Emulator emulator;
+
+    public HeadController(ReportRepository reportRepository, Emulator emulator) {
         this.reportRepository = reportRepository;
+        this.emulator = emulator;
     }
 
     @GetMapping("/reports")
@@ -58,10 +62,11 @@ public class HeadController {
     @PostMapping("/reports")
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
         try {
-            Report _Report = reportRepository
-                    .save(new Report(report.getAuthorName(), report.getReportText(), report.getStatus(), report.getDateCreation()));
             //todo логика задержки ответа
+//            emulator.emulateReportDelay(report);
 
+            Report _Report = reportRepository
+                    .save(new Report(report.getAuthorName(), report.getReportText(), report.getStatus(), report.getDateCreation(), report.getDateSending()));
 
             _Report.setStatus(Status.SUCCESS);
             reportRepository.save(_Report);

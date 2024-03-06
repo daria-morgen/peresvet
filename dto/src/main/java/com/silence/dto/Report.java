@@ -23,15 +23,19 @@ public class Report {
     @Column(name = "dateCreation")
     private String dateCreation;
 
+    @Column(name = "dateSending")
+    private String dateSending;
+
     public Report() {
 
     }
 
-    public Report(String authorName, String reportText, Status status, String dateCreation) {
+    public Report(String authorName, String reportText, Status status, String dateCreation, String dateSending) {
         this.authorName = authorName;
         this.reportText = reportText;
         this.status = status;
         this.dateCreation = dateCreation;
+        this.dateSending = dateSending;
     }
 
     public long getId() {
@@ -62,7 +66,6 @@ public class Report {
         this.status = status;
     }
 
-
     public String getDateCreation() {
         return dateCreation;
     }
@@ -71,9 +74,23 @@ public class Report {
         this.dateCreation = dateCreation;
     }
 
-    @Override
-    public String toString() {
-        return "Report [id=" + id + ", authorName=" + authorName + ", desc=" + reportText + ", status=" + status + "]";
+    public String getDateSending() {
+        return dateSending;
     }
 
+    public void setDateSending(String dateSending) {
+        this.dateSending = dateSending;
+    }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+                ", authorName='" + authorName + '\'' +
+                ", reportText='" + reportText + '\'' +
+                ", status=" + status +
+                ", dateCreation='" + dateCreation + '\'' +
+                ", dateSending='" + dateSending + '\'' +
+                '}';
+    }
 }

@@ -3,7 +3,6 @@ package com.silence.mars.controller;
 import com.silence.dto.Report;
 import com.silence.dto.Status;
 import com.silence.mars.repository.ReportRepository;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +58,7 @@ public class HeadController {
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
         try {
             Report _Report = reportRepository
-                    .save(new Report(report.getAuthorName(), report.getReportText(), Status.CREATED, report.getDateCreation()));
+                    .save(new Report(report.getAuthorName(), report.getReportText(), Status.CREATED, report.getDateCreation(), report.getDateSending()));
             return new ResponseEntity<>(_Report, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
