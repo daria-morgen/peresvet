@@ -10,7 +10,8 @@
             <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
             <div class="user-details">
               <span class="author">От: {{ report.authorName }}</span>
-              <span class="timestamp">23.02.2020 14:45:31</span>
+              <span class="timestamp">{{  format_date(report.dateCreation) }}</span>
+<!--              <span class="timestamp">{{ report.dateCreation }}</span>-->
             </div>
             <div class="chat-message" :class="{ 'expanded': report.expanded }">
               {{ report.expanded ? report.reportText : truncatedText(report.reportText) }}
@@ -31,8 +32,10 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'App',
+  components: moment,
   data() {
     return {
       reports: [],
@@ -49,6 +52,11 @@ export default {
     };
   },
   methods: {
+    format_date(value){
+      if (value) {
+        return moment(String(value)).format('DD.MM.yyyy HH:mm:ss')
+      }
+    },
     getReportList() {
       this.axios.get('http://localhost:8080/api/reports').then((response) => (this.reports = response.data));
     },
@@ -76,7 +84,7 @@ export default {
       // Логика отправки сообщения (ваш код)
       // Пример: отправка сообщения и добавление в список отчетов
       this.newReport.authorName = this.currentAuthorName;
-      this.newReport.dateCreation = new Date();
+      this.newReport.dateCreation = this.format_date(new Date());
 
       // this.newReport.reportText =
       console.log(this.reportToJson(this.newReport))
@@ -127,7 +135,7 @@ export default {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
-    console.log(this.newReport.dateCreation)
+
     this.inputPlaceholder = this.currentAuthorName === '' ? 'Dведите сообщение...' : this.authorName + ', ведите сообщение...'
   }
 };

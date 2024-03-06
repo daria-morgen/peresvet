@@ -2,7 +2,7 @@
   <div class="reports_list">
     <div class="chat-container">
       <div class="chat-header">
-        <h2>"Зенит" (Земля)</h2>
+        <h2>"Зенит" (Марс)</h2>
       </div>
       <div class="chat-messages" id="chat-messages">
         <div v-for="(report, index) in reports" :key="index" class="message-container">
@@ -10,7 +10,7 @@
             <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
             <div class="user-details">
               <span class="author">От: {{ report.authorName }}</span>
-              <span class="timestamp">23.02.2020 14:45:31</span>
+              <span class="timestamp">{{  format_date(report.dateCreation) }}</span>
             </div>
             <div class="chat-message" :class="{ 'expanded': report.expanded }">
               {{ report.expanded ? report.reportText : truncatedText(report.reportText) }}
@@ -26,16 +26,23 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'App',
+  components: moment,
   data() {
     return {
       reports: []
     };
   },
   methods: {
+    format_date(value){
+      if (value) {
+        return moment(String(value)).format('DD.MM.yyyy HH:mm:ss')
+      }
+    },
     getReportList() {
-      this.axios.get('http://localhost:8080/api/reports').then((response) => (this.reports = response.data));
+      this.axios.get('http://localhost:8084/api/reports').then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
@@ -50,8 +57,8 @@ export default {
       } else {
         return text;
       }
-    }
-    , scrollToBottom() {
+    },
+    scrollToBottom() {
       const chatMessages = document.getElementById('chat-messages');
       chatMessages.scrollTop = chatMessages.scrollHeight;
     },
@@ -101,6 +108,12 @@ body {
 
 }
 
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+}
+
+
 .chat-messages {
   max-height: 500px; /* Задаем максимальную высоту для чата */
   overflow-y: auto;
@@ -120,6 +133,7 @@ body {
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
+
 
 .user-details {
   display: flex;
@@ -182,7 +196,8 @@ body {
   /*margin-left: auto;*/
 }
 
-.expand-button:disabled {
+.expand-button:disabled,
+.send-button:disabled {
   color: #7e8cd4;
 }
 
