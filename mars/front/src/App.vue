@@ -19,8 +19,12 @@
           </div>
 
           <div class="report_info">
-            size: {{ report.reportSize }}
-            status: {{ report.status }}
+            <span >
+              size: {{ report.reportSize }},
+            </span>
+            <span :class="getStatusClass(report.status)">
+              status: {{ report.status }}
+            </span>
           </div>
           <button :disabled="!report.expanded && (report.reportText.length <= 70)" @click="toggleMessage(report)"
                   class="expand-button">Раскрыть
@@ -64,7 +68,7 @@ export default {
       }
     },
     getReportList() {
-      this.axios.get('http://localhost:8080/api/reports').then((response) => (this.reports = response.data));
+        this.axios.get('http://localhost:8080/api/reports').then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
@@ -99,6 +103,8 @@ export default {
       this.reports.push(this.newReport);
 
       const urlString = 'http://localhost:8080/api/reports'
+
+
       this.axios.post(urlString, this.reportToJson(this.newReport),
           {
             headers: {
@@ -112,7 +118,8 @@ export default {
       this.newReport = {
         authorName: '',
         reportText: '',
-        dateCreation: ''
+        dateCreation: '',
+        reportSize:''
       };
 
 
@@ -120,7 +127,8 @@ export default {
     reportToJson(reportToJson) {
       return "{\"authorName\":\"" + reportToJson.authorName + "\",\n" +
           "    \"reportText\":\"" + reportToJson.reportText + "\",\n" +
-          "    \"dateCreation\":\"" + reportToJson.dateCreation + "\"\n" +
+          "    \"dateCreation\":\"" + reportToJson.dateCreation + "\",\n" +
+          "    \"reportSize\":\"" + reportToJson.reportSize + "\"\n" +
           "}";
     },
     truncatedText(text) {
@@ -137,6 +145,20 @@ export default {
     },
     getRandomReportSize() {
       return Number((Math.random() * (1000 - 1 + 1) + 1).toFixed(2))
+    },
+    getStatusClass(status) {
+      // Возвращаем класс в зависимости от значения статуса
+      switch (status) {
+        case 'SUCCESS':
+          return 'success-status';
+        case 'SENDING':
+          return 'sending-status';
+        case 'ERROR':
+          return 'error-status';
+          // Добавьте другие кейсы, если необходимо
+        default:
+          return 'default-status';
+      }
     }
   },
   beforeMount() {
@@ -307,13 +329,12 @@ body {
   margin-left: 10px;
 }
 
-.report_info{
+.report_info {
   margin-left: auto;
   font-size: 12px;
   color: #555555;
   padding-right: 10px;
 }
-
 
 .chat-messages::-webkit-scrollbar {
   width: 10px; /* Увеличиваем ширину скроллбара */
@@ -332,6 +353,22 @@ body {
 /* Скрытие горизонтального скролла */
 .chat-messages::-webkit-scrollbar-horizontal {
   display: none;
+}
+
+.success-status {
+  color: green;
+}
+
+.error-status {
+  color: red;
+}
+
+.default-status {
+  color: #555555;
+}
+
+.sending-status {
+  color: #d5cd17;
 }
 
 </style>

@@ -10,11 +10,19 @@
             <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
             <div class="user-details">
               <span class="author">От: {{ report.authorName }}</span>
-              <span class="timestamp">{{  format_date(report.dateCreation) }}</span>
+              <span class="timestamp">{{ format_date(report.dateCreation) }}</span>
             </div>
             <div class="chat-message" :class="{ 'expanded': report.expanded }">
               {{ report.expanded ? report.reportText : truncatedText(report.reportText) }}
             </div>
+          </div>
+          <div class="report_info">
+            <span >
+              size: {{ report.reportSize }},
+            </span>
+            <span :class="getStatusClass(report.status)">
+              status: {{ report.status }}
+            </span>
           </div>
           <button :disabled="!report.expanded && (report.reportText.length <= 70)" @click="toggleMessage(report)"
                   class="expand-button">Раскрыть
@@ -27,6 +35,7 @@
 
 <script>
 import moment from 'moment'
+
 export default {
   name: 'App',
   components: moment,
@@ -36,7 +45,7 @@ export default {
     };
   },
   methods: {
-    format_date(value){
+    format_date(value) {
       if (value) {
         return moment(String(value)).format('yyyy-MM-DD HH:mm:ss')
       }
@@ -62,6 +71,20 @@ export default {
       const chatMessages = document.getElementById('chat-messages');
       chatMessages.scrollTop = chatMessages.scrollHeight;
     },
+    getStatusClass(status) {
+      // Возвращаем класс в зависимости от значения статуса
+      switch (status) {
+        case 'SUCCESS':
+          return 'success-status';
+        case 'SENDING':
+          return 'sending-status';
+        case 'ERROR':
+          return 'error-status';
+          // Добавьте другие кейсы, если необходимо
+        default:
+          return 'default-status';
+      }
+    }
   },
   beforeMount() {
     this.getReportList();
@@ -183,6 +206,13 @@ body {
   text-overflow: initial;
 }
 
+.report_info {
+  margin-left: auto;
+  font-size: 12px;
+  color: #555555;
+  padding-right: 10px;
+}
+
 .expand-button {
   background-color: var(--container-bg-color);
   color: #0a1a68;
@@ -220,4 +250,19 @@ body {
   display: none;
 }
 
+.success-status {
+  color: green;
+}
+
+.error-status {
+  color: red;
+}
+
+.default-status {
+  color: #555555;
+}
+
+.sending-status {
+  color: #d5cd17;
+}
 </style>
