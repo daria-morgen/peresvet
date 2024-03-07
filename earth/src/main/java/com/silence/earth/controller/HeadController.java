@@ -1,9 +1,12 @@
 package com.silence.earth.controller;
 
+import com.silence.dto.LostEarthConnection;
 import com.silence.dto.Report;
 import com.silence.dto.Status;
 import com.silence.earth.repository.ReportRepository;
 import com.silence.earth.service.Emulator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class HeadController {
+    private final Logger LOG = LoggerFactory.getLogger(HeadController.class);
+
 
     private final ReportRepository reportRepository;
 
@@ -62,8 +67,8 @@ public class HeadController {
     @PostMapping("/reports")
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
         try {
-            //todo логика задержки ответа
-//            emulator.emulateReportDelay(report);
+            LOG.info("createReport: "+report.toString());
+            emulator.emulateReportDelay(report);
 
             Report _Report = reportRepository
                     .save(new Report(report.getAuthorName(), report.getReportText(), report.getStatus(), report.getDateCreation(), report.getDateSending()));
@@ -72,7 +77,11 @@ public class HeadController {
             reportRepository.save(_Report);
             return new ResponseEntity<>(_Report, HttpStatus.CREATED);
         } catch (Exception e) {
+            LOG.error(e.toString());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (LostEarthConnection lostEarthConnection) {
+            lostEarthConnection.printStackTrace();
+            return new ResponseEntity<>(report, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

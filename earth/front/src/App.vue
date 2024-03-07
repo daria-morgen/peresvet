@@ -38,7 +38,7 @@ export default {
   methods: {
     format_date(value){
       if (value) {
-        return moment(String(value)).format('DD.MM.yyyy HH:mm:ss')
+        return moment(String(value)).format('yyyy-MM-DD HH:mm:ss')
       }
     },
     getReportList() {

@@ -2,6 +2,8 @@ package com.silence.dto;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "Reports")
@@ -80,6 +82,21 @@ public class Report {
 
     public void setDateSending(String dateSending) {
         this.dateSending = dateSending;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Report report = (Report) o;
+        return id == report.id && Objects.equals(authorName, report.authorName) &&
+                Objects.equals(reportText, report.reportText) && status == report.status &&
+                Objects.equals(dateCreation, report.dateCreation) && Objects.equals(dateSending, report.dateSending);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, authorName, reportText, status, dateCreation, dateSending);
     }
 
     @Override

@@ -22,10 +22,12 @@ import java.util.GregorianCalendar;
 public class ReportSender {
 
     private final ReportRepository reportRepository;
+    private final DateFormatter dateFormatter;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public ReportSender(ReportRepository reportRepository) {
+    public ReportSender(ReportRepository reportRepository, DateFormatter dateFormatter) {
         this.reportRepository = reportRepository;
+        this.dateFormatter = dateFormatter;
     }
 
     @Scheduled(fixedDelay = 6000)
@@ -43,15 +45,9 @@ public class ReportSender {
 
             report.setStatus(Status.SENDING);
 
-            //todo Добавить сервис форматирования дат
             GregorianCalendar gcal = new GregorianCalendar();
-            SimpleDateFormat formattedDate
-                    = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            String dateSending
-                    = formattedDate.format(
-                    gcal.getTime());
+            report.setDateSending(dateFormatter.toStringFormat(gcal));
 
-            report.setDateSending(dateSending);
             reportRepository.save(report);
 
             HttpEntity<String> request =
