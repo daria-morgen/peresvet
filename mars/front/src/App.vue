@@ -10,12 +10,17 @@
             <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
             <div class="user-details">
               <span class="author">От: {{ report.authorName }}</span>
-              <span class="timestamp">{{  format_date(report.dateCreation) }}</span>
-<!--              <span class="timestamp">{{ report.dateCreation }}</span>-->
+              <span class="timestamp">{{ format_date(report.dateCreation) }}</span>
+              <!--              <span class="timestamp">{{ report.dateCreation }}</span>-->
             </div>
             <div class="chat-message" :class="{ 'expanded': report.expanded }">
               {{ report.expanded ? report.reportText : truncatedText(report.reportText) }}
             </div>
+          </div>
+
+          <div class="report_info">
+            size: {{ report.reportSize }}
+            status: {{ report.status }}
           </div>
           <button :disabled="!report.expanded && (report.reportText.length <= 70)" @click="toggleMessage(report)"
                   class="expand-button">Раскрыть
@@ -33,6 +38,7 @@
 
 <script>
 import moment from 'moment'
+
 export default {
   name: 'App',
   components: moment,
@@ -52,7 +58,7 @@ export default {
     };
   },
   methods: {
-    format_date(value){
+    format_date(value) {
       if (value) {
         return moment(String(value)).format('yyyy-MM-DD HH:mm:ss')
       }
@@ -85,6 +91,7 @@ export default {
       // Пример: отправка сообщения и добавление в список отчетов
       this.newReport.authorName = this.currentAuthorName;
       this.newReport.dateCreation = this.format_date(new Date());
+      this.newReport.reportSize = this.getRandomReportSize();
 
       // this.newReport.reportText =
       console.log(this.reportToJson(this.newReport))
@@ -128,6 +135,9 @@ export default {
       const chatMessages = document.getElementById('chat-messages');
       chatMessages.scrollTop = chatMessages.scrollHeight;
     },
+    getRandomReportSize() {
+      return Number((Math.random() * (1000 - 1 + 1) + 1).toFixed(2))
+    }
   },
   beforeMount() {
     this.getReportList();
@@ -296,6 +306,14 @@ body {
 .send-button {
   margin-left: 10px;
 }
+
+.report_info{
+  margin-left: auto;
+  font-size: 12px;
+  color: #555555;
+  padding-right: 10px;
+}
+
 
 .chat-messages::-webkit-scrollbar {
   width: 10px; /* Увеличиваем ширину скроллбара */

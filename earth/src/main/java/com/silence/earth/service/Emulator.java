@@ -39,7 +39,7 @@ public class Emulator {
         LOG.info("activePeriod: "+activePeriod);
         if (!Objects.isNull(activePeriod)) {
             //создаем случайный размер сообщения в мегабитах в пределах 100мбит
-            double reportSize = getRandomReportSize();
+            double reportSize = report.getReportSize();
             double currentSpeed = activePeriod.getSpeed();
 
             int milliToSleep;
@@ -85,15 +85,5 @@ public class Emulator {
         return activePeriod;
     }
 
-    private double getRandomReportSize() {
-        double leftLimit = 1D;
-        double rightLimit = 1000D;
 
-        double value = leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
-        int places = 1;
-
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
 }

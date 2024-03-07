@@ -58,7 +58,14 @@ public class HeadController {
     public ResponseEntity<Report> createReport(@RequestBody Report report) {
         try {
             Report _Report = reportRepository
-                    .save(new Report(report.getAuthorName(), report.getReportText(), Status.CREATED, report.getDateCreation(), report.getDateSending()));
+                    .save(new Report(
+                            report.getAuthorName(),
+                            report.getReportText(),
+                            Status.CREATED,
+                            report.getDateCreation(),
+                            report.getDateSending(),
+                            report.getReportSize())
+                    );
             return new ResponseEntity<>(_Report, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

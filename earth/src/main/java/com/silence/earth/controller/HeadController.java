@@ -71,7 +71,14 @@ public class HeadController {
             emulator.emulateReportDelay(report);
 
             Report _Report = reportRepository
-                    .save(new Report(report.getAuthorName(), report.getReportText(), report.getStatus(), report.getDateCreation(), report.getDateSending()));
+                    .save(new Report(
+                            report.getAuthorName(),
+                            report.getReportText(),
+                            report.getStatus(),
+                            report.getDateCreation(),
+                            report.getDateSending(),
+                            report.getReportSize())
+                    );
 
             _Report.setStatus(Status.SUCCESS);
             reportRepository.save(_Report);

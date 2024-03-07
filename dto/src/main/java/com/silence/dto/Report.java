@@ -28,16 +28,25 @@ public class Report {
     @Column(name = "dateSending")
     private String dateSending;
 
+    @Column(name = "reportSize")
+    private double reportSize;
+
     public Report() {
 
     }
 
-    public Report(String authorName, String reportText, Status status, String dateCreation, String dateSending) {
+    public Report(String authorName,
+                  String reportText,
+                  Status status,
+                  String dateCreation,
+                  String dateSending,
+                  double reportSize) {
         this.authorName = authorName;
         this.reportText = reportText;
         this.status = status;
         this.dateCreation = dateCreation;
         this.dateSending = dateSending;
+        this.reportSize = reportSize;
     }
 
     public long getId() {
@@ -84,19 +93,25 @@ public class Report {
         this.dateSending = dateSending;
     }
 
+    public double getReportSize() {
+        return reportSize;
+    }
+
+    public void setReportSize(double reportSize) {
+        this.reportSize = reportSize;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return id == report.id && Objects.equals(authorName, report.authorName) &&
-                Objects.equals(reportText, report.reportText) && status == report.status &&
-                Objects.equals(dateCreation, report.dateCreation) && Objects.equals(dateSending, report.dateSending);
+        return id == report.id && Double.compare(report.reportSize, reportSize) == 0 && Objects.equals(authorName, report.authorName) && Objects.equals(reportText, report.reportText) && status == report.status && Objects.equals(dateCreation, report.dateCreation) && Objects.equals(dateSending, report.dateSending);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, authorName, reportText, status, dateCreation, dateSending);
+        return Objects.hash(id, authorName, reportText, status, dateCreation, dateSending, reportSize);
     }
 
     @Override
@@ -108,6 +123,7 @@ public class Report {
                 ", status=" + status +
                 ", dateCreation='" + dateCreation + '\'' +
                 ", dateSending='" + dateSending + '\'' +
+                ", reportSize=" + reportSize +
                 '}';
     }
 }
