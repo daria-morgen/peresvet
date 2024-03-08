@@ -126,6 +126,8 @@ public class ReportSender {
         if (reportsForRetry.isEmpty()) {
             reportsForRetry = reportRepository.findFirst10ByStatus(Status.ERROR);
         }
+        LOG.info("reportsForRetry size: " + reportsForRetry.size());
+
         for (Report report : reportsForRetry) {
             if (!reportConcurrentMap.containsKey(report.getId())) {
 
