@@ -2,7 +2,7 @@
   <div class="reports_list">
     <div class="chat-container">
       <div class="chat-header">
-        <h2>"Зенит" (Марс)</h2>
+        <h2>"Зенит" (Земля)</h2>
       </div>
       <div class="chat-messages" id="chat-messages">
         <div v-for="(report, index) in reports" :key="index" class="message-container">
@@ -51,7 +51,7 @@ export default {
       }
     },
     getReportList() {
-      this.axios.get('http://localhost:8084/api/reports').then((response) => (this.reports = response.data));
+      this.axios.get('http://194.87.238.141:8084/api/reports').then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
