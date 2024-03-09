@@ -53,6 +53,7 @@ export default {
       inputAuthorName: 'От...',
       inputPlaceholder: 'Введите сообщение...',
       currentAuthorName: '',
+      urlString: 'http://localhost:8081/api/reports',
       newReport: {
         authorName: '',
         reportText: '',
@@ -68,7 +69,7 @@ export default {
       }
     },
     getReportList() {
-        this.axios.get('http://localhost:8080/api/reports').then((response) => (this.reports = response.data));
+        this.axios.get(this.urlString).then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
@@ -100,12 +101,9 @@ export default {
       // this.newReport.reportText =
       console.log(this.reportToJson(this.newReport))
 
-      this.reports.push(this.newReport);
-
-      const urlString = 'http://localhost:8080/api/reports'
 
 
-      this.axios.post(urlString, this.reportToJson(this.newReport),
+      this.axios.post(this.urlString, this.reportToJson(this.newReport),
           {
             headers: {
               "content-type": "application/json",
@@ -114,6 +112,8 @@ export default {
       );
 
       this.inputPlaceholder = this.currentAuthorName + ', ведите сообщение...'
+
+      this.reports.push(this.newReport);
       // Очищаем введенное сообщение после отправки
       this.newReport = {
         authorName: '',

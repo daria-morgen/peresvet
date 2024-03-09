@@ -41,7 +41,8 @@ export default {
   components: moment,
   data() {
     return {
-      reports: []
+      reports: [],
+      urlString: 'http://localhost:8082/api/reports',
     };
   },
   methods: {
@@ -51,7 +52,7 @@ export default {
       }
     },
     getReportList() {
-      this.axios.get('http://localhost:8081/api/reports').then((response) => (this.reports = response.data));
+      this.axios.get(this.urlString).then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
