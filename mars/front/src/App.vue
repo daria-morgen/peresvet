@@ -53,7 +53,7 @@ export default {
       inputAuthorName: 'От...',
       inputPlaceholder: 'Введите сообщение...',
       currentAuthorName: '',
-      urlString: 'http://localhost:8081/api/reports',
+      urlString: 'http://193.124.114.82:8081/api/reports',
       newReport: {
         authorName: '',
         reportText: '',
