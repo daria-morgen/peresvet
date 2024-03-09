@@ -9,25 +9,46 @@ import java.util.Objects;
 @Table(name = "Reports")
 public class Report {
 
+    /**
+     * Уникальный идентификатор очета в бд.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    /**
+     * Имя автора
+     */
     @Column(name = "authorName")
     private String authorName;
 
+    /**
+     * Текст отчета
+     */
     @Column(name = "reportText")
     private String reportText;
 
+    /**
+     * Статус
+     */
     @Column(name = "status")
     private Status status;
 
+    /**
+     * Дата создания
+     */
     @Column(name = "dateCreation")
     private String dateCreation;
 
+    /**
+     * Дата отправки
+     */
     @Column(name = "dateSending")
     private String dateSending;
 
+    /**
+     * Размер отчета
+     */
     @Column(name = "reportSize")
     private double reportSize;
 

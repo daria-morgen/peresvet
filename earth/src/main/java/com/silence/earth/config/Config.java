@@ -26,6 +26,7 @@ public class Config {
     @Bean
     public String loadPeriods() throws IOException {
         LOG.debug("loadPeriods started");
+        LOG.info("filePath: "+filePath);
         periods = objectMapper.readValue(new File(filePath), Period[].class);
 
         return Strings.EMPTY;
