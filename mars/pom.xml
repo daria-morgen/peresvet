@@ -83,7 +83,7 @@
                             <outputDirectory>target/classes/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>/front/dist</directory>
+                                    <directory>front/dist</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silence.dto.Report;
 import com.silence.dto.Status;
+import com.silence.mars.config.ServerConfig;
 import com.silence.mars.repository.ReportRepository;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -29,16 +31,25 @@ public class ReportSender {
 
     private final ReportRepository reportRepository;
     private final DateFormatter dateFormatter;
+
+    private final ServerConfig serverConfig;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
-    private ConcurrentMap<Long, Callable<String>> reportConcurrentMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, Callable<String>> reportConcurrentMap = new ConcurrentHashMap<>();
 
     List<Callable<String>> callableTasks = new ArrayList<>();
 
-    public ReportSender(ReportRepository reportRepository, DateFormatter dateFormatter) {
+    public ReportSender(ReportRepository reportRepository, DateFormatter dateFormatter, ServerConfig serverConfig) {
         this.reportRepository = reportRepository;
         this.dateFormatter = dateFormatter;
+        this.serverConfig = serverConfig;
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        executorService.shutdown();
     }
 
     @Scheduled(fixedDelay = 6000)
@@ -55,6 +66,7 @@ public class ReportSender {
                     return "Task's execution";
                 };
 
+
                 reportConcurrentMap.put(report.getId(), callableTask);
                 callableTasks.add(callableTask);
 
@@ -64,6 +76,7 @@ public class ReportSender {
                 if (future.isDone()) {
                     reportConcurrentMap.remove(report.getId());
                 }
+
             }
 
         }
@@ -92,7 +105,7 @@ public class ReportSender {
         String personResultAsJsonStr = null;
         try {
             personResultAsJsonStr =
-                    restTemplate.postForObject("http://localhost:8084/api/reports", request, String.class);
+                    restTemplate.postForObject(serverConfig.getCurrentRemoteServerHost()+"/api/reports", request, String.class);
 
             if (objectMapper.readValue(personResultAsJsonStr, Report.class).getStatus().equals(Status.SUCCESS)) {
                 report.setStatus(Status.SUCCESS);
@@ -172,7 +185,7 @@ public class ReportSender {
 
         try {
             personResultAsJsonStr =
-                    restTemplate.postForObject("http://localhost:8084/api/reports", request, String.class);
+                    restTemplate.postForObject(serverConfig.getCurrentRemoteServerHost()+"/api/reports", request, String.class);
 
             if (objectMapper.readValue(personResultAsJsonStr, Report.class).getStatus().equals(Status.SUCCESS)) {
                 report.setStatus(Status.SUCCESS);
