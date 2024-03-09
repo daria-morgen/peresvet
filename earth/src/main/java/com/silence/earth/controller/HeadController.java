@@ -82,7 +82,7 @@ public class HeadController {
 
             _Report.setStatus(Status.SUCCESS);
             reportRepository.save(_Report);
-            return new ResponseEntity<>(_Report, HttpStatus.CREATED);
+            return new ResponseEntity<>(_Report, HttpStatus.OK);
         } catch (Exception e) {
             LOG.error(e.toString());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

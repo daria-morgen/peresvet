@@ -49,7 +49,7 @@ public class Emulator {
                 milliToSleep = 1000;
             } else {//Иначе, получаем
 
-                milliToSleep = (int) Math.ceil(( reportSize * 1000)/currentSpeed);
+                milliToSleep = (int) Math.ceil((reportSize * 1000) / currentSpeed);
             }
             LOG.info("Tread starting report: " + report.getId() + ", reportSize: " + reportSize + ", milliToSleep: " + milliToSleep);
 
@@ -58,9 +58,9 @@ public class Emulator {
             if (Objects.isNull(getActivePeriod(dateSending))) {
                 throw new LostEarthConnection("LostEarthConnection" + report.toString() + ", reportSize: " + reportSize);
             }
-
+        }else {
+            throw new LostEarthConnection("LostEarthConnection" + report);
         }
-
     }
 
     private Period getActivePeriod(Calendar dateSending) {
