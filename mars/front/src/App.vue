@@ -4,8 +4,7 @@
       <div class="chat-header head_font_style">
         <h2>ЗЕНИТ МАРС</h2>
       </div>
-      <div class="chat-messages" id="chat-messages">
-        <div class="outgoing-rect_send_button">
+      <div class="outgoing-rect_send_button">
           <div class="outgoing-messages-rect">
             <div>исходящие</div>
           </div>
@@ -13,6 +12,8 @@
             <button @click="showModal = true" class="send_button_new">+ новый отчет</button>
           </div>
         </div>
+      <div class="chat-messages" id="chat-messages">
+        
         <div v-for="(report, index) in reports" :key="index" class="message-container">
           <div class="message-content white_color">
             <div>
