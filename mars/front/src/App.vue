@@ -15,12 +15,6 @@
         </div>
         <div v-for="(report, index) in reports" :key="index" class="message-container">
           <div class="message-content white_color">
-            <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
-            <!-- <div class="user-details"> -->
-            <!-- <span class="author">От: {{ report.authorName }}</span> -->
-            <!-- <span class="timestamp">{{ format_date(report.dateCreation) }}</span> -->
-            <!--              <span class="timestamp">{{ report.dateCreation }}</span>-->
-            <!-- </div> -->
             <div>
               <span class="author">{{ report.authorName }}</span>
             </div>
@@ -49,15 +43,11 @@
           </div>
         </div>
       </div>
-
-      <button id="show-modal" @click="showModal = true">Show Modal</button>
       <!-- use the modal component, pass in the prop -->
       <Transition name="modal_input" v-if="showModal" @close="showModal = false">
         <div class="modal-mask">
           <div class="modal-wrapper">
             <div class="modal-container">
-
-
               <div class="modal-body">
                 <div class="sender_container">
                   <div><label class="white_color">Отправитель: </label></div>
@@ -73,12 +63,12 @@
 
               <div class="modal-footer">
                 <div>
-                  <button class="modal-default-button" @click="showModal = false">
+                  <button class="modal_default_button" @click="showModal = false">
                     отмена
                   </button>
                 </div>
                 <div>
-                  <button @click="validateAndSendMessage" class="send-button">отправить</button>
+                  <button @click="validateAndSendMessage()" class="modal_send_button">отправить</button>
                 </div>
               </div>
             </div>
@@ -92,11 +82,10 @@
 
 <script>
 import moment from 'moment'
-import ModalInput from './components/ModalInput.vue'
 
 export default {
   name: 'App',
-  components: moment, ModalInput,
+  components: moment,
   data() {
     return {
       reports: [],
@@ -171,16 +160,10 @@ export default {
       }
     },
     sendMessage() {
-      // Логика отправки сообщения (ваш код)
-      // Пример: отправка сообщения и добавление в список отчетов
       this.newReport.authorName = this.currentAuthorName;
       this.newReport.dateCreation = this.format_date(new Date());
       this.newReport.reportSize = this.getRandomReportSize();
       this.newReport.status = 'CREATED'
-      // this.newReport.reportText =
-      console.log(this.reportToJson(this.newReport))
-
-
 
       // this.axios.post(this.urlString, this.reportToJson(this.newReport),
       //     {
@@ -193,14 +176,14 @@ export default {
       this.inputPlaceholder = this.currentAuthorName + ', ведите сообщение...'
 
       this.reports.push(this.newReport);
-      // Очищаем введенное сообщение после отправки
+
       this.newReport = {
         authorName: '',
         reportText: '',
         dateCreation: '',
         reportSize: ''
       };
-
+      this.showModal = false;
 
     },
     reportToJson(reportToJson) {
@@ -251,7 +234,6 @@ export default {
           return 'Отправка...';
         case 'ERROR':
           return 'Не отправлено';
-        // Добавьте другие кейсы, если необходимо
         default:
           return 'Создано';
       }
@@ -286,11 +268,8 @@ body {
 }
 
 .chat-header {
-  /*background-color: #ab64db;*/
-  /*color: #0d2887;*/
   padding: 10px;
   text-align: center;
-  /*color: #f2f2f2;*/
 
 }
 
@@ -307,8 +286,6 @@ body {
 }
 
 .chat-input button {
-  /*background-color: #191970;*/
-  /*color: #fff;*/
   border: none;
   padding: 8px 15px;
   cursor: pointer;
@@ -318,7 +295,6 @@ body {
 
 .chat-messages {
   max-height: 500px;
-  /* Задаем максимальную высоту для чата */
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -343,24 +319,6 @@ body {
 
 }
 
-.circle {
-  width: 30px;
-  /* Размер увеличен в 3 раза */
-  height: 30px;
-  /* Размер увеличен в 3 раза */
-  background-color: #a969d9;
-  border-radius: 50%;
-  margin-right: 10px;
-
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px;
-  /* Добавляем отступ справа */
-}
-
 .user-details .author {
   font-weight: bold;
 }
@@ -378,7 +336,6 @@ body {
 
 .message-content {
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
   padding: 10px;
   /* Изменяем направление флекс-контейнера на колонку */
@@ -397,15 +354,12 @@ body {
 }
 
 .chat-message {
-  /*background-color: #f2f2f2;*/
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 10px;
   word-wrap: break-word;
   /* Добавляем перенос слов */
-
   word-break: break-all;
-  /* Обеспечиваем перенос длинных слов */
 
   src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
   font-family: Montserrat;
@@ -460,12 +414,6 @@ body {
   width: 176px;
   height: 32px;
   align-items: center;
-  /* top: 445px */
-  /* left: 1406px */
-  /* border-radius: 27px */
-  /* border: 1px */
-
-
 }
 
 .report_status span {
@@ -644,6 +592,7 @@ body {
   text-align: left;
 
 }
+
 .modal-enter {
   opacity: 0;
 }
@@ -693,10 +642,43 @@ label {
 }
 
 .modal-footer {
-
   display: flex;
-  align-items: center;
   flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: right;
 }
 
+.modal_default_button {
+  width: 224px;
+  height: 50px;
+  top: 701px;
+  left: 942px;
+  border-radius: 15px;
+  background: #222222;
+  color: #FFFFFF;
+
+  border: none;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0.31em;
+  text-align: center;
+}
+
+.modal_send_button {
+  width: 224px;
+  height: 50px;
+  top: 701px;
+  left: 1176px;
+  border-radius: 15px;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0.31em;
+  text-align: center;
+
+}
 </style>
