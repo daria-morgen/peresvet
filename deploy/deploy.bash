@@ -1,14 +1,14 @@
 #!/bin/bash
 #chmod +x ./myscript
 
-cp ../mars/target/mars-0.0.1-SNAPSHOT.jar ./
-scp mars-0.0.1-SNAPSHOT.jar root@193.124.114.82:../peresvet
+cp ../mars/target/mars-0.0.2-SNAPSHOT.jar ./
+scp mars-0.0.2-SNAPSHOT.jar root@193.124.114.82:../peresvet
 #http://193.124.114.82:8081/
 
 
-cp ../earth/target/earth-0.0.1-SNAPSHOT.jar ./
+cp ../earth/target/earth-0.0.2-SNAPSHOT.jar ./
 cp ../earth/src/main/resources/periods.json ./
-scp earth-0.0.1-SNAPSHOT.jar root@193.124.113.4:../peresvet
+scp earth-0.0.2-SNAPSHOT.jar root@193.124.113.4:../peresvet
 scp periods.json root@193.124.113.4:../peresvet
 
 
