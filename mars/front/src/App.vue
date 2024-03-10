@@ -111,33 +111,7 @@ export default {
       }
     },
     getReportList() {
-      // this.axios.get(this.urlString).then((response) => (this.reports = response.data));
-      this.newReport.authorName = 'Daria';
-      this.newReport.dateCreation = this.format_date(new Date());
-      this.newReport.reportSize = this.getRandomReportSize();
-      this.newReport.status = 'CREATED'
-      this.newReport.reportText = 'Супер классный отчет. День на марсе 663, вырастили ,картошку,картошку,картошку,картошку,картошку,картошку,картошку.'
-      this.reports.push(this.newReport);
-      // Очищаем введенное сообщение после отправки
-      this.newReport = {
-        authorName: '',
-        reportText: '',
-        dateCreation: '',
-        reportSize: ''
-      };
-      this.newReport.authorName = 'Olga';
-      this.newReport.dateCreation = this.format_date(new Date());
-      this.newReport.reportSize = this.getRandomReportSize();
-      this.newReport.status = 'CREATED'
-      this.newReport.reportText = 'СДень на марсе 663, разработали план общения с марсианами'
-      this.reports.push(this.newReport);
-      // Очищаем введенное сообщение после отправки
-      this.newReport = {
-        authorName: '',
-        reportText: '',
-        dateCreation: '',
-        reportSize: ''
-      };
+      this.axios.get(this.urlString).then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
@@ -165,13 +139,13 @@ export default {
       this.newReport.reportSize = this.getRandomReportSize();
       this.newReport.status = 'CREATED'
 
-      // this.axios.post(this.urlString, this.reportToJson(this.newReport),
-      //     {
-      //       headers: {
-      //         "content-type": "application/json",
-      //       },
-      //     }
-      // );
+      this.axios.post(this.urlString, this.reportToJson(this.newReport),
+                {
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                }
+            );
 
       this.inputPlaceholder = this.currentAuthorName + ', ведите сообщение...'
 
