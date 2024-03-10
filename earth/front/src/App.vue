@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       reports: [],
-      urlString: 'http://localhost:8082/api/reports',
+      urlString: 'http://193.124.113.4:8082/api/reports',
     };
   },
   methods: {
