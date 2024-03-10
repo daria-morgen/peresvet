@@ -11,7 +11,7 @@
           <div class="send_button_new">
             <button @click="showModal = true" class="send_button_new">+ новый отчет</button>
           </div>
-      </div>
+        </div>
       <div class="chat-messages" id="chat-messages">
         
         <div v-for="(report, index) in reports" :key="index" class="message-container">
@@ -112,7 +112,73 @@ export default {
       }
     },
     getReportList() {
-      this.axios.get(this.urlString).then((response) => (this.reports = response.data));
+    this.newReport.authorName = 'Daria';
+          this.newReport.dateCreation = this.format_date(new Date());
+          this.newReport.reportSize = this.getRandomReportSize();
+          this.newReport.status = 'CREATED'
+          this.newReport.reportText = 'Супер классный отчет. День на марсе 663, вырастили ,картошку,картошку,картошку,картошку,картошку,картошку,картошку.'
+          this.reports.push(this.newReport);
+          // Очищаем введенное сообщение после отправки
+          this.newReport = {
+            authorName: '',
+            reportText: '',
+            dateCreation: '',
+            reportSize: ''
+          };
+          this.newReport.authorName = 'Olga';
+          this.newReport.dateCreation = this.format_date(new Date());
+          this.newReport.reportSize = this.getRandomReportSize();
+          this.newReport.status = 'CREATED'
+          this.newReport.reportText = 'СДень на марсе 663, разработали план общения с марсианами'
+          this.reports.push(this.newReport);
+          // Очищаем введенное сообщение после отправки
+          this.newReport = {
+            authorName: '',
+            reportText: '',
+            dateCreation: '',
+            reportSize: ''
+          };
+
+          this.newReport.authorName = 'Olga';
+          this.newReport.dateCreation = this.format_date(new Date());
+          this.newReport.reportSize = this.getRandomReportSize();
+          this.newReport.status = 'CREATED'
+          this.newReport.reportText = 'СДень на марсе 663, разработали план общения с марсианами'
+          this.reports.push(this.newReport);
+          // Очищаем введенное сообщение после отправки
+          this.newReport = {
+            authorName: '',
+            reportText: '',
+            dateCreation: '',
+            reportSize: ''
+          };
+          this.newReport.authorName = 'Olga';
+          this.newReport.dateCreation = this.format_date(new Date());
+          this.newReport.reportSize = this.getRandomReportSize();
+          this.newReport.status = 'CREATED'
+          this.newReport.reportText = 'СДень на марсе 663, разработали план общения с марсианами'
+          this.reports.push(this.newReport);
+          // Очищаем введенное сообщение после отправки
+          this.newReport = {
+            authorName: '',
+            reportText: '',
+            dateCreation: '',
+            reportSize: ''
+          };
+          this.newReport.authorName = 'Olga';
+          this.newReport.dateCreation = this.format_date(new Date());
+          this.newReport.reportSize = this.getRandomReportSize();
+          this.newReport.status = 'CREATED'
+          this.newReport.reportText = 'СДень на марсе 663, разработали план общения с марсианами'
+          this.reports.push(this.newReport);
+          // Очищаем введенное сообщение после отправки
+          this.newReport = {
+            authorName: '',
+            reportText: '',
+            dateCreation: '',
+            reportSize: ''
+          };
+     // this.axios.get(this.urlString).then((response) => (this.reports = response.data));
     },
     toggleMessage(report) {
       // Прежде чем изменить значение, проверьте, есть ли текст в отчете
@@ -270,6 +336,7 @@ body {
 
 .chat-messages {
   max-height: 500px;
+  min-width: 400px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -284,13 +351,14 @@ body {
   position: relative;
   margin-bottom: 10px;
   /* padding-top: 5px; */
-  margin-right: 10px;
   background: #222222;
   border-radius: 15px;
   border: 1px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   padding: 5px;
-
+  margin-right: 0; /* Уберите отрицательный margin */
+  box-sizing: border-box; /* Используйте border-box для учета padding и border в ширине элемента */
+    width: 100%; /* Задайте ширину 100%, чтобы избежать выхода за пределы */
 
 }
 
@@ -335,7 +403,7 @@ body {
   word-wrap: break-word;
   /* Добавляем перенос слов */
   word-break: break-all;
-
+  min-width: 100px;
   src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
   font-family: Montserrat;
   font-size: 18px;
@@ -481,7 +549,8 @@ body {
 
 .send_button_new {
   max-width: 388px;
-  height: 72px;
+  min-height: 72px;
+  min-width: 236px;
   border-radius: 15px;
   border: 1px;
   border: 1px solid #5A5A5A;
@@ -494,8 +563,6 @@ body {
   letter-spacing: 0.81em;
   text-align: center;
   src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
-  white-space: nowrap;
-  /* margin-left: auto; */
 
 }
 
