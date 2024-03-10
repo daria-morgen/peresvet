@@ -1,32 +1,43 @@
 <template>
   <div class="reports_list">
     <div class="chat-container">
-      <div class="chat-header">
-        <h2>"Зенит" (Земля)</h2>
+      <div class="chat-header head_font_style">
+        <h2>ЗЕНИТ МАРС</h2>
       </div>
       <div class="chat-messages" id="chat-messages">
+        <div class="outgoing-rect_send_button">
+          <div class="outgoing-messages-rect">
+            <div>исходящие</div>
+          </div>
+        </div>
         <div v-for="(report, index) in reports" :key="index" class="message-container">
-          <div class="message-content">
-            <!--            <div class="circle"></div> &lt;!&ndash; Кружок &ndash;&gt;-->
-            <div class="user-details">
-              <span class="author">От: {{ report.authorName }}</span>
-              <span class="timestamp">{{ format_date(report.dateCreation) }}</span>
+          <div class="message-content white_color">
+            <div>
+              <span class="author">{{ report.authorName }}</span>
             </div>
-            <div class="chat-message" :class="{ 'expanded': report.expanded }">
+            <div class="chat-message " :class="{ 'expanded': report.expanded }">
               {{ report.expanded ? report.reportText : truncatedText(report.reportText) }}
             </div>
           </div>
-          <div class="report_info">
-            <span >
-              size: {{ report.reportSize }},
-            </span>
-            <span :class="getStatusClass(report.status)">
-              status: {{ report.status }}
+          <div class="report_size white_color">
+            <span>
+              {{ report.reportSize }} kB
             </span>
           </div>
-          <button :disabled="!report.expanded && (report.reportText.length <= 70)" @click="toggleMessage(report)"
-                  class="expand-button">Раскрыть
-          </button>
+          <div class="status_date_container">
+            <div :class="getStatusClass(report.status) + ' report_status'">
+              <span>
+                {{ getReportStatus(report.status) }}
+              </span>
+            </div>
+            <span class="report_timestamp">{{ format_date(report.dateCreation) }}</span>
+          </div>
+
+          <div class="expand_button_container">
+            <button :disabled="!report.expanded && (report.reportText.length <= 70)" @click="toggleMessage(report)"
+              :class="!report.expanded ? transformButton() + ' expand-button' : 'expand-button'">^
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -81,9 +92,24 @@ export default {
           return 'sending-status';
         case 'ERROR':
           return 'error-status';
-          // Добавьте другие кейсы, если необходимо
         default:
           return 'default-status';
+      }
+    },
+    transformButton() {
+      // Возвращаем класс
+      return 'transform_button';
+    },
+    getReportStatus(status) {
+      switch (status) {
+        case 'SUCCESS':
+          return 'Доставлено';
+        case 'SENDING':
+          return 'Отправка...';
+        case 'ERROR':
+          return 'Не отправлено';
+        default:
+          return 'Создано';
       }
     }
   },
@@ -93,6 +119,7 @@ export default {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+
   }
 };
 </script>
@@ -102,34 +129,28 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: black;
 }
 
 .chat-container {
-  /*--container-bg-color: #f0f0f0;*/
-  max-width: 900px;
+  max-width: 70%;
   margin: 50px auto;
-  border: 1px solid #ccc;
 
-  border-radius: 10px; /* Скругленные углы */
   overflow: hidden;
   box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.5);
   padding: 10px;
-  background-size: cover; /* Позволяет изображению занимать всю доступную область */
-
-  /*background: url('./assets/background1.jpg') center center no-repeat;*/
-  background-size: cover;
-  /* Прозрачность фона */
-  /*opacity: 0.5;*/
-  /*background-color: var(--container-bg-color);*/
 }
 
 .chat-header {
-  /*background-color: #ab64db;*/
-  /*color: #0d2887;*/
   padding: 10px;
   text-align: center;
-  /*color: #f2f2f2;*/
+}
 
+.chat-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
 }
 
 .chat-input input {
@@ -137,9 +158,16 @@ body {
   padding: 8px;
 }
 
+.chat-input button {
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-right: 5px;
+}
 
 .chat-messages {
-  max-height: 500px; /* Задаем максимальную высоту для чата */
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -147,37 +175,43 @@ body {
 .message-container {
   display: flex;
   align-items: center;
-  flex-direction: column; /* Изменяем направление флекс-контейнера на строку */
-  text-align: left; /* Выравниваем текст слева */
+  flex-direction: row;
+  /* Изменяем направление флекс-контейнера на строку */
+  text-align: left;
+  /* Выравниваем текст слева */
   position: relative;
   margin-bottom: 10px;
-  padding-top: 5px;
+  /* padding-top: 5px; */
   margin-right: 10px;
-  background-color: #f2f2f2;
-  border-radius: 10px;
+  background: #222222;
+  border-radius: 15px;
+  border: 1px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-}
+  padding: 5px;
 
 
-.user-details {
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px; /* Добавляем отступ справа */
 }
 
 .user-details .author {
   font-weight: bold;
 }
 
-.user-details .timestamp {
-  color: #555;
+.report_timestamp {
+  color: #ffffff;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.2em;
+  text-align: right;
+
 }
 
 .message-content {
   display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding-left: 10px; /* Изменяем направление флекс-контейнера на колонку */
+  flex-direction: column;
+  padding: 10px;
+  /* Изменяем направление флекс-контейнера на колонку */
   /*padding-right: 10px;!* Изменяем направление флекс-контейнера на колонку *!*/
   width: 100%;
 }
@@ -185,21 +219,27 @@ body {
 .chat-message,
 .chat-message.expanded {
   display: flex;
-  flex-wrap: wrap; /* Позволяет элементам переноситься на следующую строку */
-  justify-content: flex-start; /* Размещаем содержимое слева */
+  flex-wrap: wrap;
+  /* Позволяет элементам переноситься на следующую строку */
+  justify-content: flex-start;
+  /* Размещаем содержимое слева */
   width: 100%;
 }
 
 .chat-message {
-  /*background-color: #f2f2f2;*/
-  padding: 10px;
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 10px;
-  word-wrap: break-word; /* Добавляем перенос слов */
+  word-wrap: break-word;
+  /* Добавляем перенос слов */
+  word-break: break-all;
 
-  word-break: break-all; /* Обеспечиваем перенос длинных слов */
-
+  src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 30px;
+  letter-spacing: 0em;
 }
 
 .chat-message.expanded {
@@ -207,39 +247,62 @@ body {
   text-overflow: initial;
 }
 
-.report_info {
-  margin-left: auto;
-  font-size: 12px;
-  color: #555555;
-  padding-right: 10px;
-}
-
 .expand-button {
   background-color: var(--container-bg-color);
-  color: #0a1a68;
+  color: #ffffff;
+  background-color: #323232;
   border: none;
   padding: 8px 15px;
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: 50%;
+  font-size: 20px;
   /*margin-top: 5px; !* Добавляем отступ сверху *!*/
   box-shadow: none;
   border: none;
   /*margin-left: auto;*/
 }
 
+.transform_button {
+  transform: rotate(180deg);
+}
+
 .expand-button:disabled,
 .send-button:disabled {
-  color: #7e8cd4;
+  color: #565656;
+}
+
+.status_date_container {
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 10px;
+}
+
+.report_status {
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  border-radius: 27px;
+  width: 176px;
+  height: 32px;
+  align-items: center;
+}
+
+.report_status span {
+  margin: auto;
 }
 
 .chat-messages::-webkit-scrollbar {
-  width: 10px; /* Увеличиваем ширину скроллбара */
+  width: 10px;
+  /* Увеличиваем ширину скроллбара */
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
   background-color: #ccc;
   outline: 1px solid #ccc;
-  margin-left: 10px; /* Добавляем отступ слева */
+  margin-left: 10px;
+  /* Добавляем отступ слева */
 }
 
 .chat-messages::-webkit-scrollbar-track {
@@ -260,10 +323,115 @@ body {
 }
 
 .default-status {
-  color: #555555;
+  color: #7e8cd4;
 }
 
 .sending-status {
   color: #d5cd17;
+}
+
+.head_font_style {
+  color: #49FFE9;
+  font-family: Montserrat;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 39px;
+  letter-spacing: 1.11em;
+  text-align: left;
+
+  src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+}
+
+.outgoing-messages-rect {
+  max-width: 388px;
+  height: 72px;
+  border-radius: 15px;
+  border: 1px;
+  border: 1px solid #5A5A5A;
+  text-align: center;
+  /* align-items: center; */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.outgoing-messages-rect div {
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.81em;
+  text-align: center;
+  color: #E1E1E1;
+  margin: auto;
+  padding: 10px;
+  src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+}
+
+.outgoing-rect_send_button {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* flex-direction: row; */
+  justify-content: space-between;
+}
+
+.send_button_new {
+  max-width: 388px;
+  height: 72px;
+  border-radius: 15px;
+  border: 1px;
+  border: 1px solid #5A5A5A;
+  color: #49FFE9;
+  background: #222222;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.81em;
+  text-align: center;
+  src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  white-space: nowrap;
+  /* margin-left: auto; */
+
+}
+
+.white_color {
+  color: #FFFFFF;
+
+}
+
+.expand-button-container {
+  padding: 10px;
+  /* angle: -180 deg; */
+}
+
+.report_size {
+  font-size: 10px;
+  font-family: Montserrat;
+  src: url('fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.2em;
+  text-align: right;
+  padding: 10px;
+
+}
+.sender_container input,
+label {
+  width: 100%;
+}
+
+.report_container input,
+label {
+  width: 100%;
+
+}
+
+.sender_container,
+.report_container {
+  margin-top: 15px;
 }
 </style>
