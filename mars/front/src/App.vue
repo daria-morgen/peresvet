@@ -11,7 +11,7 @@
           <div class="send_button_new">
             <button @click="showModal = true" class="send_button_new">+ новый отчет</button>
           </div>
-        </div>
+      </div>
       <div class="chat-messages" id="chat-messages">
         
         <div v-for="(report, index) in reports" :key="index" class="message-container">
