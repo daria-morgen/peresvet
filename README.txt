@@ -35,8 +35,8 @@ mvn clean install
 
 java -jar ./target/earth-0.0.1-SNAPSHOT.jar -Dperiods.path=./target/classes/periods.json
 
-http://localhost:8081/
+http://localhost:8082/
 
 java -jar ./target/mars-0.0.1-SNAPSHOT.jar
 
-http://localhost:8082/
+http://localhost:8081/
