@@ -33,10 +33,10 @@ cd earth
 
 mvn clean install
 
-java -jar ./target/earth-0.0.1-SNAPSHOT.jar -Dperiods.path=./target/classes/periods.json
+java -jar ./target/earth-0.0.2-SNAPSHOT.jar -Dperiods.path=./target/classes/periods.json
 
 http://localhost:8081/
 
-java -jar ./target/mars-0.0.1-SNAPSHOT.jar
+java -jar ./target/mars-0.0.2-SNAPSHOT.jar
 
 http://localhost:8080/
