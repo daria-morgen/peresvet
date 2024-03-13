@@ -74,8 +74,8 @@ public class Emulator {
             try {
                 from = dateFormatter.toCalendarFormat(period.getFrom());
                 to = dateFormatter.toCalendarFormat(period.getTo());
-                if ((currentDate.after(from) && currentDate.before(to))//если сейчас земля доступна
-                        && (dateSending.after(from) && dateSending.before(to))) { //и сообщение отправлено как бы в доступный период
+                //если сейчас земля доступна
+                if (currentDate.after(from) && currentDate.before(to)){
                     activePeriod = period;
                 }
             } catch (ParseException e) {
